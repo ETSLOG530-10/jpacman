@@ -1,5 +1,6 @@
 package nl.tudelft.jpacman.ui;
 
+import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -61,7 +62,9 @@ public class PacManUiBuilder {
      * @return A new Pac-Man UI with the set keys and buttons.
      */
     public PacManUI build(final Game game) {
-        assert game != null;
+        if (game == null) {
+            throw new NullPointerException("game cannot be null.");
+        }
 
         if (defaultButtons) {
             addStartButton(game);
@@ -106,8 +109,12 @@ public class PacManUiBuilder {
      * @return The builder.
      */
     public PacManUiBuilder addKey(Integer keyCode, Action action) {
-        assert keyCode != null;
-        assert action != null;
+        if (keyCode == null) {
+            throw new NullPointerException("keyCode cannot be null.");
+        }
+        if (action == null) {
+            throw new NullPointerException("action cannot be null.");
+        }
 
         keyMappings.put(keyCode, action);
         return this;
@@ -123,9 +130,15 @@ public class PacManUiBuilder {
      * @return The builder.
      */
     public PacManUiBuilder addButton(String caption, Action action) {
-        assert caption != null;
-        assert !caption.isEmpty();
-        assert action != null;
+        if (caption == null) {
+            throw new NullPointerException("caption cannot be null.");
+        }
+        if (caption.isEmpty()) {
+            throw new InvalidParameterException("caption cannot be empty.");
+        }
+        if (action == null) {
+            throw new NullPointerException("action cannot be null.");
+        }
 
         buttons.put(caption, action);
         return this;

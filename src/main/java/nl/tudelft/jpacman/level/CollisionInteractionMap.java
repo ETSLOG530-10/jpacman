@@ -57,9 +57,9 @@ public class CollisionInteractionMap implements CollisionMap {
      * @param <C2>
      *            The collidee (unit that was moved into) type.
      *
-     * @param collider
+     * @param collider1
      *            The collider type.
-     * @param collidee
+     * @param collider2
      *            The collidee type.
      * @param symetric
      *            <code>true</code> if this collision is used for both
@@ -69,11 +69,11 @@ public class CollisionInteractionMap implements CollisionMap {
      *            The handler that handles the collision.
      */
     public <C1 extends Unit, C2 extends Unit> void onCollision(
-        Class<C1> collider, Class<C2> collidee, boolean symetric,
+        Class<C1> collider1, Class<C2> collider2, boolean symetric,
         CollisionHandler<C1, C2> handler) {
-        addHandler(collider, collidee, handler);
+        addHandler(collider1, collider2, handler);
         if (symetric) {
-            addHandler(collidee, collider, new InverseCollisionHandler<>(handler));
+            addHandler(collider2, collider1, new InverseCollisionHandler<>(handler));
         }
     }
 
@@ -89,9 +89,7 @@ public class CollisionInteractionMap implements CollisionMap {
      */
     private void addHandler(Class<? extends Unit> collider,
                             Class<? extends Unit> collidee, CollisionHandler<?, ?> handler) {
-        if (!handlers.containsKey(collider)) {
-            handlers.put(collider, new HashMap<>());
-        }
+        handlers.computeIfAbsent(collider, c -> handlers.put(c, new HashMap<>()));
 
         Map<Class<? extends Unit>, CollisionHandler<?, ?>> map = handlers.get(collider);
         map.put(collidee, handler);
@@ -243,8 +241,8 @@ public class CollisionInteractionMap implements CollisionMap {
          * it compatible with the initial collision.
          */
         @Override
-        public void handleCollision(C1 collider, C2 collidee) {
-            handler.handleCollision(collidee, collider);
+        public void handleCollision(C1 collider1, C2 collider2) {
+            handler.handleCollision(collider2, collider1);
         }
     }
 

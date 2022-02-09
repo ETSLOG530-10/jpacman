@@ -92,9 +92,15 @@ public class Level {
      */
     public Level(Board board, List<Ghost> ghosts, List<Square> startPositions,
                  CollisionMap collisionMap) {
-        assert board != null;
-        assert ghosts != null;
-        assert startPositions != null;
+        if (board == null) {
+            throw new NullPointerException("Board is null");
+        }
+        if (ghosts == null) {
+            throw new NullPointerException("Ghosts is null");
+        }
+        if (startPositions == null) {
+            throw new NullPointerException("Start Positions is null");
+        }
 
         this.board = board;
         this.inProgress = false;
@@ -138,8 +144,12 @@ public class Level {
      *            The player to register.
      */
     public void registerPlayer(Player player) {
-        assert player != null;
-        assert !startSquares.isEmpty();
+        if (player == null) {
+            throw new NullPointerException("Player is null");
+        }
+        if (startSquares.isEmpty()) {
+            throw new NullPointerException("Start Squares is empty");
+        }
 
         if (players.contains(player)) {
             return;
@@ -170,9 +180,15 @@ public class Level {
      *            The direction to move the unit in.
      */
     public void move(Unit unit, Direction direction) {
-        assert unit != null;
-        assert direction != null;
-        assert unit.hasSquare();
+        if (unit == null) {
+            throw new NullPointerException("Unit is null");
+        }
+        if (direction == null) {
+            throw new NullPointerException("Direction is null");
+        }
+        if (!unit.hasSquare()) {
+            throw new NullPointerException("Unit is empty");
+        }
 
         if (!isInProgress()) {
             return;
@@ -297,7 +313,6 @@ public class Level {
      * @return The amount of pellets remaining on the board.
      */
     public int remainingPellets() {
-        Board board = getBoard();
         int pellets = 0;
         for (int x = 0; x < board.getWidth(); x++) {
             for (int y = 0; y < board.getHeight(); y++) {

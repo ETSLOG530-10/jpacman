@@ -1,6 +1,7 @@
 package nl.tudelft.jpacman.sprite;
 
 import java.awt.Graphics;
+import java.security.InvalidParameterException;
 
 /**
  * Animated sprite, renders the frame depending on the time of requesting the
@@ -73,7 +74,9 @@ public class AnimatedSprite implements Sprite {
      *            Whether or not this sprite is animating from the start.
      */
     public AnimatedSprite(Sprite[] frames, int delay, boolean loop, boolean isAnimating) {
-        assert frames.length > 0;
+        if (frames.length <= 0) {
+            throw new InvalidParameterException("Frames cannot be empty.");
+        }
 
         this.animationFrames = frames.clone();
         this.animationDelay = delay;

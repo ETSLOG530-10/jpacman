@@ -1,12 +1,11 @@
 package nl.tudelft.jpacman.npc;
 
 import nl.tudelft.jpacman.board.Direction;
+import nl.tudelft.jpacman.board.Square;
 import nl.tudelft.jpacman.board.Unit;
 import nl.tudelft.jpacman.sprite.Sprite;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 /**
  * A non-player unit.
@@ -14,6 +13,9 @@ import java.util.Random;
  * @author Jeroen Roosen
  */
 public abstract class Ghost extends Unit {
+
+    private static Random randomizer = new Random();
+
     /**
      * The sprite map, one sprite for each direction.
      */
@@ -74,26 +76,16 @@ public abstract class Ghost extends Unit {
      * @return The suggested delay between moves in milliseconds.
      */
     public long getInterval() {
-        return this.moveInterval + new Random().nextInt(this.intervalVariation);
+        return (long)this.moveInterval + randomizer.nextInt(this.intervalVariation);
     }
 
-
-
     /**
      * Determines a possible move in a random direction.
      *
      * @return A direction in which the ghost can move, or <code>null</code> if
      * the ghost is shut in by inaccessible squares.
      */
-     protected abstract Direction randomMove();
-
-    /**
-     * Determines a possible move in a random direction.
-     *
-     * @return A direction in which the ghost can move, or <code>null</code> if
-     * the ghost is shut in by inaccessible squares.
-     */
-    /*protected Direction randomMove() {
+    protected Direction randomMove() {
         Square square = getSquare();
         List<Direction> directions = new ArrayList<>();
         for (Direction direction : Direction.values()) {
@@ -104,7 +96,7 @@ public abstract class Ghost extends Unit {
         if (directions.isEmpty()) {
             return null;
         }
-        int i = new Random().nextInt(directions.size());
+        int i = randomizer.nextInt(directions.size());
         return directions.get(i);
-    }*/
+    }
 }

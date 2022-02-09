@@ -5,6 +5,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -88,8 +89,12 @@ public class SpriteStore {
      */
     public AnimatedSprite createAnimatedSprite(Sprite baseImage, int frames,
                                                int delay, boolean loop) {
-        assert baseImage != null;
-        assert frames > 0;
+        if (baseImage == null) {
+            throw new NullPointerException("BaseImage cannot be null.");
+        }
+        if (frames <= 0) {
+            throw new InvalidParameterException("Frames cannot be 0 or lower.");
+        }
 
         int frameWidth = baseImage.getWidth() / frames;
 

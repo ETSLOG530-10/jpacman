@@ -5,8 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import nl.tudelft.jpacman.level.Player;
 
@@ -27,12 +26,12 @@ public class ScorePanel extends JPanel {
     /**
      * The map of players and the labels their scores are on.
      */
-    private final Map<Player, JLabel> scoreLabels;
+    private final transient Map<Player, JLabel> scoreLabels;
 
     /**
      * The default way in which the score is shown.
      */
-    public static final ScoreFormatter DEFAULT_SCORE_FORMATTER =
+    public static final transient ScoreFormatter DEFAULT_SCORE_FORMATTER =
         (Player player) -> String.format("Score: %3d", player.getScore());
 
     /**
@@ -48,16 +47,18 @@ public class ScorePanel extends JPanel {
      */
     public ScorePanel(List<Player> players) {
         super();
-        assert players != null;
+        if (players == null) {
+            throw new NullPointerException("players cannot be null.");
+        }
 
         setLayout(new GridLayout(2, players.size()));
 
         for (int i = 1; i <= players.size(); i++) {
-            add(new JLabel("Player " + i, JLabel.CENTER));
+            add(new JLabel("Player " + i, SwingConstants.CENTER));
         }
         scoreLabels = new LinkedHashMap<>();
         for (Player player : players) {
-            JLabel scoreLabel = new JLabel("0", JLabel.CENTER);
+            JLabel scoreLabel = new JLabel("0", SwingConstants.CENTER);
             scoreLabels.put(player, scoreLabel);
             add(scoreLabel);
         }
@@ -96,7 +97,9 @@ public class ScorePanel extends JPanel {
      * @param scoreFormatter Score formatter to be used.
      */
     public void setScoreFormatter(ScoreFormatter scoreFormatter) {
-        assert scoreFormatter != null;
+        if (scoreFormatter == null) {
+            throw new NullPointerException("scoreFormatter cannot be null.");
+        }
         this.scoreFormatter = scoreFormatter;
     }
 }
